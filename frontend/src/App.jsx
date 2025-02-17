@@ -1,16 +1,18 @@
-import React, {useState,useEffect} from "react";
-import Login from "./components/Login";
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './components/Login';
+import Callback from './components/Callback';
 
-
-const App = () => { 
-    return(
-        <div className="bg-gray-100">
-        <div className="min-h-screen flex items-center justify-center">
-        <Login />
-    </div>
-    
-    </div>);
-
-}
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/callback" element={<Callback />} />
+        <Route path="/" element={<Login />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
