@@ -9,6 +9,9 @@ import (
 	"net/url"
 	"os"
 
+	"backend/database"
+	"backend/models"
+
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
@@ -43,6 +46,18 @@ func OAuthCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	token, err := oauthConfig.Exchange(context.Background(), code)
 	if err != nil {
 		http.Error(w, "Failed to exchange token: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Save the token to the database
+	dbToken := models.Token{
+		AccessToken:  token.AccessToken,
+		TokenType:    token.TokenType,
+		RefreshToken: token.RefreshToken,
+		Expiry:       token.Expiry.Unix(),
+	}
+	if err := database.DB.Create(&dbToken).Error; err != nil {
+		http.Error(w, "Failed to save token: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 

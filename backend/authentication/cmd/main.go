@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"backend/authentication/oauth"
+	"backend/database"
 	router "backend/routers"
 
 	"github.com/joho/godotenv"
@@ -19,6 +20,8 @@ func main() {
 
 	// Initialize OAuth configuration
 	oauth.InitOAuthConfig()
+
+	database.InitDB()
 
 	r := router.NewRouter()
 	http.ListenAndServe(":8080", r)
